@@ -2,8 +2,9 @@
 (setq inhibit-startup-message t)
 
 ;; font and frame size
-(set-frame-font "Consolas 12")
-(set-frame-size (selected-frame) 125 34)
+(set-frame-font "Consolas 18")
+(set-frame-size (selected-frame) 125 38)
+(tool-bar-mode -1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; packages          ;;
