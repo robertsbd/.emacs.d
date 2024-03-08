@@ -1,0 +1,7 @@
+# ignore everything 
+/*
+
+# include these files
+!.gitignore
+!init.el
+!README.md
