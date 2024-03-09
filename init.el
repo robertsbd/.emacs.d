@@ -1,23 +1,9 @@
-;; no startup msg  
+;; no startup msg
 (setq inhibit-startup-message t)
-
-;; Machine specific settings
-(setq ispell-program-name
-      (if (string= (system-name) "Benjamins-MacBook-Pro.local")
-	  "/usr/local/Cellar/hunspell/1.7.2/bin/hunspell"
-	(if (string= (system-name) "Benjamins-MacBook-Pro.local")
-	    "C:/Users/BenRoberts/Applications/hunspell-1.3.2-3-w32-bin/bin/hunspell.exe"
-	  "")))
-
-;; font and frame size
-(set-frame-font "Consolas 18")
-(set-frame-size (selected-frame) 125 38)
-(tool-bar-mode -1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; packages          ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
-
 
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
@@ -39,23 +25,19 @@
 	org-ai
 	dired-sidebar
 	org-download
-	chatgpt-shell
-	dall-e-shell
+;;	chatgpt-shell
+;;	dall-e-shell
 	doom-themes
 	disable-mouse
 	company-go
 	company
 	lsp-mode
 	go-mode
-	autothemer
 	chatgpt
 	evil
 	sqlite3
 	disable-mouse
-	org-download
 	rainbow-delimiters
-	beacon
-	chatgpt
 	nyan-mode
 	magit))
 
@@ -65,21 +47,18 @@
   (unless (package-installed-p pkg)
     (package-install pkg)))
 
-
-;; Enable vertico
-(require 'vertico)
-(vertico-mode)
+(use-package vertico
+  :init
+  (vertico-mode))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
   :init
   (savehist-mode))
 
-;; chatgpt-shell Need to start putting this stuff into ^/.authinfo
-(require 'chatgpt-shell)
-(require 'dall-e-shell)
-
-;; org-ai
+;; chatgpt-shell
+;; (require 'chatgpt-shell)
+;; (require 'dall-e-shell)
 
 (use-package org-ai
   :ensure t
@@ -90,16 +69,17 @@
   :config
   (setq org-ai-default-chat-model "gpt-3.5-turbo"))
 
-;; dired-sidebar
-
 (use-package dired-sidebar
   :ensure t
   :commands (dired-sidebar-toggle-sidebar))
 
 (require 'doom-themes)
 
-(require 'disable-mouse)
-(global-disable-mouse-mode)
+(use-package disable-mouse
+  :init (global-disable-mouse-mode))
+
+(use-package nyan-mode
+  :init (nyan-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; themes and look   ;;
@@ -131,8 +111,6 @@
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
 (tool-bar-mode -1)
-(beacon-mode 1)
-(nyan-mode 1)
 
 ;; go-mode
 (require 'lsp-mode)
@@ -174,8 +152,8 @@
 (add-hook 'org-mode-hook
  (lambda ()
    (visual-line-mode 1)
-   (org-indent-mode 1)
-   (rainbow-delimiters-mode 1)))
+   (rainbow-delimiters-mode -1)
+   (org-indent-mode 1)))
 
 (add-hook 'org-agenda-mode-hook
           (lambda ()
@@ -188,9 +166,7 @@
 
 (setq org-todo-keywords
       '(
-(sequence "TODO" "DOING" "TESTING" "|")
-(sequence "LATER" "NEXT" "NOW" "|")
-(sequence "|" "DONE" "DELEGATED")))
+(sequence "TODO" "DOING" "DONE")))
 
 ;; Automatically update the top level todo task when sub items are completed
 (defun org-summary-todo (n-done n-not-done)
@@ -212,7 +188,22 @@
 
 (setq next-line-add-newlines t) ;; Create a new line when we hit the end of the buffer
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Machine specific settings ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(if (string= (system-name) "Benjamins-MacBook-Pro.local")
+    (progn
+      (setq ispell-program-name "/usr/local/Cellar/hunspell/1.7.2/bin/hunspell")
+      (set-frame-font "Consolas 14")
+      (set-frame-size (selected-frame) 130 40))
+  (if (string= (system-name) "CK-Laptop-956JH")
+      (progn
+	(setq ispell-program-name "C:/Users/BenRoberts/Applications/hunspell-1.3.2-3-w32-bin/bin/hunspell.exe")
+	(set-frame-font "Consolas 12")
+	(set-frame-size (selected-frame) 135 33))
+    "")
+  )
 
 ;; set up spelling, one has to download these dictionaries separately
 (setq ispell-dictionary "en_GB")
@@ -222,4 +213,29 @@
 ;;;;;;;;;;;;;;;;;;;;;
 
 (load "~/.emacs.d/secrets.el")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
