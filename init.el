@@ -5,11 +5,13 @@
 ;; checking the specific machine and setting up
 ;; 1. spelling
 (cond
- ((string= (system-name) "Benjamins-MacBook-Pro.local")
+ ((string= (upcase (system-name)) "Benjamins-MacBook-Pro.local")
   (progn
-    (setq ispell-program-name "/usr/local/Cellar/hunspell/1.7.2/bin/hunspell")))
- ((string= (system-name) "CK-LAPTOP-956JH")
-  (progn
+    (setq ispell-program-name "/usr/local/Cellar/hunspell/1.7.2/bin/hunspell")
+    (setq org-directory "~/org_files/")
+    (setq default-directory "~/")))
+ ((string= (upcase (system-name)) "CK-LAPTOP-956JH")
+  (prognn
     (setq ispell-program-name "C:/Users/BenRoberts/Applications/hunspell-1.3.2-3-w32-bin/bin/hunspell.exe")
     (setq org-directory "~/org_files/")
     (setq default-directory "~/")))
@@ -24,17 +26,32 @@
         ;; and smaller 80 column windows for smaller displays
         ;; pick whatever numbers make sense for you
         (if (> (x-display-pixel-width) 1500)
+	    (progn
+              (setq default-frame-alist
+                    '((top . 0)(left . 0)
+                      (width . 140)(height . 33)
+                      (font . "Consolas-12")
+                      ))
+              (setq initial-frame-alist
+                    '((top . 0)(left . 0)
+                      (width . 140)(height . 33)
+                      (font . "Consolas-12")
+                      ))
+	      )
+	  (progn
             (setq default-frame-alist
                   '((top . 0)(left . 0)
-                    (width . 140)(height . 33)
+                    (width . 85)(height . 25)
                     (font . "Consolas-12")
                     ))
-          (setq default-frame-alist
-                '((top . 0)(left . 0)
-                  (width . 85)(height . 25)
-                  (font . "Consolas-12")
-                  )))
-        ))
+            (setq initial-frame-alist
+                  '((top . 0)(left . 0)
+                    (width . 85)(height . 25)
+                    (font . "Consolas-12")
+                    )))
+          )
+	)
+    )
   )
 (set-frame-size-according-to-resolution)
 
