@@ -11,7 +11,7 @@
     (setq org-directory "~/org_files/")
     (setq default-directory "~/")))
  ((string= (upcase (system-name)) "CK-LAPTOP-956JH")
-  (prognn
+  (progn
     (setq ispell-program-name "C:/Users/BenRoberts/Applications/hunspell-1.3.2-3-w32-bin/bin/hunspell.exe")
     (setq org-directory "~/org_files/")
     (setq default-directory "~/")))
