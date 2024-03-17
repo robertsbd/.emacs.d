@@ -220,9 +220,9 @@
 (add-hook 'prog-mode-hook
 	  (lambda ()
 	    (display-line-numbers-mode 1)
-	    (visual-line-mode -1)
+	    (visual-line-mode nil)
 	    (rainbow-delimiters-mode 1)
-	    (setq show-trailing-whitespace t)
+	    (setq show-trailing-whitespace nil)
 	    (company-mode)))
 
 ;; I don't understand why emacs-lisp-mode is not inheriting from prog-mode
@@ -231,11 +231,11 @@
 	    (display-line-numbers-mode 1)
 	    (visual-line-mode -1)
 	    (rainbow-delimiters-mode 1)
-	    (setq show-trailing-whitespace t)))
+	    (setq show-trailing-whitespace nil)))
 
 (add-hook 'yaml-mode
 	  (lambda ()
-	    (highlight-indentation-mode 1)
+	    (highlight-indentation-mode nil)
 	    (display-line-numbers-mode 1)
 	    (visual-line-mode 1)))
 
