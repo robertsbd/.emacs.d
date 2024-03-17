@@ -55,7 +55,6 @@
   )
 (set-frame-size-according-to-resolution)
 
-
 ;; no startup msg
 (setq inhibit-startup-message t)
 
@@ -99,13 +98,26 @@
 	disable-mouse
 	rainbow-delimiters
 	nyan-mode
-	magit))
+	magit
+	graphviz-dot-mode
+	ob-go
+	highlight-indentation
+	yaml-mode
+	terraform-mode
+	))
 
 ;; iterate on packages and install missing ones
 
 (dolist (pkg my-packages)
   (unless (package-installed-p pkg)
     (package-install pkg)))
+
+(use-package graphviz-dot-mode
+  :ensure t
+  :config
+  (setq graphviz-dot-indent-width 4))
+
+(setq image-use-external-converter t)
 
 (use-package vertico
   :init
@@ -118,8 +130,8 @@
 
 (use-package neotree
   :config
-  (setq neo-theme 'arrows)
-  (setq-default neo-show-hidden-files t)
+  (setq neo-theme 'icons) ;; arrows is another option to have - snd +
+  (setq-default neo-show-hidden-files nil) ;; change this to t if we want hidden files to show by default
   (setq neo-smart-open t)
   (setq neo-window-width 35))
 
@@ -154,6 +166,21 @@
 (use-package nyan-mode
   :init (nyan-mode))
 
+(use-package terraform-mode
+  ;; if using straight
+  ;; :straight t
+
+  ;; if using package.el
+  ;; :ensure t
+  :custom (terraform-indent-level 4)
+  :config
+  (defun my-terraform-mode-init ()
+    ;; if you want to use outline-minor-mode
+    ;; (outline-minor-mode 1)
+    )
+
+  (add-hook 'terraform-mode-hook 'my-terraform-mode-init))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -162,7 +189,7 @@
  '(custom-safe-themes
    '("6454421996f0508c38215a633256e36c19a28591542fb0946cfc40f1dceb89cf" "7e377879cbd60c66b88e51fad480b3ab18d60847f31c435f15f5df18bdb18184" "8b148cf8154d34917dfc794b5d0fe65f21e9155977a36a5985f89c09a9669aa0" "df6dfd55673f40364b1970440f0b0cb8ba7149282cf415b81aaad2d98b0f0290" "013728cb445c73763d13e39c0e3fd52c06eefe3fbd173a766bfd29c6d040f100" "ffafb0e9f63935183713b204c11d22225008559fa62133a69848835f4f4a758c" "a9dc7790550dcdb88a23d9f81cc0333490529a20e160a8599a6ceaf1104192b5" "3de5c795291a145452aeb961b1151e63ef1cb9565e3cdbd10521582b5fd02e9a" "014cb63097fc7dbda3edf53eb09802237961cbb4c9e9abd705f23b86511b0a69" "34cf3305b35e3a8132a0b1bdf2c67623bc2cb05b125f8d7d26bd51fd16d547ec" "6adeb971e4d5fe32bee0d5b1302bc0dfd70d4b42bad61e1c346599a6dc9569b5" "29b4f767c48da68f8f3c2bbf0dde2be58e4ed9c97e685af5a7ab7844f0d08b8b" "ff24d14f5f7d355f47d53fd016565ed128bf3af30eb7ce8cae307ee4fe7f3fd0" "13096a9a6e75c7330c1bc500f30a8f4407bd618431c94aeab55c9855731a95e1" "badd1a5e20bd0c29f4fe863f3b480992c65ef1fa63951f59aa5d6b129a3f9c4c" "88f7ee5594021c60a4a6a1c275614103de8c1435d6d08cc58882f920e0cec65e" default))
  '(package-selected-packages
-   '(neotree vertico sqlite3 rainbow-delimiters org-download org-ai nyan-mode magit lsp-mode evil doom-themes disable-mouse dired-sidebar dall-e-shell company-go chatgpt-shell chatgpt beacon autothemer)))
+   '(graphviz-dot-mode neotree vertico sqlite3 rainbow-delimiters org-download org-ai nyan-mode magit lsp-mode evil doom-themes disable-mouse dired-sidebar dall-e-shell company-go chatgpt-shell chatgpt beacon autothemer)))
 
 ;;;;;;;;;;;
 ;; modes ;;
@@ -173,6 +200,9 @@
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
 (tool-bar-mode -1)
+
+;; graphviz mode
+(add-hook 'graphviz-dot-mode-hook 'company-mode)
 
 ;; go-mode
 (require 'lsp-mode)
@@ -203,9 +233,23 @@
 	    (rainbow-delimiters-mode 1)
 	    (setq show-trailing-whitespace t)))
 
+(add-hook 'yaml-mode
+	  (lambda ()
+	    (highlight-indentation-mode 1)
+	    (display-line-numbers-mode 1)
+	    (visual-line-mode 1)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-mode settings ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'ob-go)
+
+(org-babel-do-load-languages
+    'org-babel-load-languages
+    '((dot . t)
+      (go . t)))
+
 
 ;; turn on indent mode and line wrapping
 (add-hook 'org-mode-hook
